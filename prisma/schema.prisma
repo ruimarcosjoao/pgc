@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Pgc {
+  id          Int                @id @default(autoincrement())
+  description String
+  code        String             @unique
+  subcamada   PgcSegundaCamada[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model PgcSegundaCamada {
+  id            Int                 @id @default(autoincrement())
+  description   String
+  code          String              @unique
+  subcamada     PgcTerceiraCamada[]
+  camadaAcima   Pgc                 @relation(fields: [camadaAcimaID], references: [id])
+  camadaAcimaID Int
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+}
+
+model PgcTerceiraCamada {
+  id            Int               @id @default(autoincrement())
+  description   String
+  code          String            @unique
+  subcamada     PgcQuartaCamada[]
+  camadaAcima   PgcSegundaCamada  @relation(fields: [camadaAcimaID], references: [id])
+  camadaAcimaID Int
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model PgcQuartaCamada {
+  id            Int               @id @default(autoincrement())
+  description   String
+  code          String            @unique
+  camadaAcima   PgcTerceiraCamada @relation(fields: [camadaAcimaID], references: [id])
+  camadaAcimaID Int
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
