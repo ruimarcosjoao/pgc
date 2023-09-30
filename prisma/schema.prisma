@@ -12,6 +12,7 @@ datasource db {
 
 model Pgc {
   id          Int                @id @default(autoincrement())
+  name        String             @unique
   description String
   code        String             @unique
   subcamada   PgcSegundaCamada[]
@@ -21,6 +22,7 @@ model Pgc {
 
 model PgcSegundaCamada {
   id            Int                 @id @default(autoincrement())
+  name          String             @unique
   description   String
   code          String              @unique
   subcamada     PgcTerceiraCamada[]
@@ -32,6 +34,7 @@ model PgcSegundaCamada {
 
 model PgcTerceiraCamada {
   id            Int               @id @default(autoincrement())
+  name          String             @unique
   description   String
   code          String            @unique
   subcamada     PgcQuartaCamada[]
@@ -43,6 +46,7 @@ model PgcTerceiraCamada {
 
 model PgcQuartaCamada {
   id            Int               @id @default(autoincrement())
+  name          String             @unique
   description   String
   code          String            @unique
   camadaAcima   PgcTerceiraCamada @relation(fields: [camadaAcimaID], references: [id])

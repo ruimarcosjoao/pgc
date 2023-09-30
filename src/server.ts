@@ -1,10 +1,10 @@
 import express, { Response, Request, NextFunction } from "express";
 import {
-  connection,
   pgcDatabase,
   pgcSegundaCamadaDatabase,
 } from "./database/connection";
 import { z, AnyZodObject } from "zod";
+import Pgc from "./entities/pgcEntity";
 
 const app = express();
 const PORT = process.env.PORT || 8081;
@@ -78,15 +78,11 @@ app.get("/pgc", async (req: Request, res: Response) => {
 
 app.post("/add-pgc", async (req: Request, res: Response) => {
   try {
-    const { description, code } = req.body;
-    const pgc = await pgcDatabase.findFirst({
-      where: {
-        OR: [{ description }, { code }],
-      },
-      include: {
-        subcamada: true,
-      },
-    });
+    const data: {description: string, code: string, name: string} = req.body;
+    const pgc = new Pgc()
+    const result = await pgc.create(data)
+    return res.status(200).json({msg: 'hello', result})
+
 
     if (!pgc) {
       const pgcCreate = await pgcDatabase.create({ data: req.body });

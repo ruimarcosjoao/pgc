@@ -1,9 +1,8 @@
-import axios from "axios";
 import { expect, test } from "vitest";
+import Pgc from "../src/entities/pgcEntity";
 
 test('Pegar todos os pgcs da tabela e seus relacionamentos', async () => {
-    const result = await axios.get('http://localhost:8081/pgc')
-    console.log(result.data)
-    
-    return result.data
+    const pgc = await new Pgc()
+    const result = await pgc.getPGCs() 
+    console.log(result)
 })
