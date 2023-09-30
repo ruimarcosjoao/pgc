@@ -58,7 +58,15 @@ app.get("/pgc", async (req: Request, res: Response) => {
     const pgc = await pgcDatabase.findMany({
       
       include: {
-        subcamada: true
+        subcamada:{
+          include: {
+            subcamada: {
+              include: {
+                subcamada: true
+              }
+            }
+          }
+        }
       }
     });
 
